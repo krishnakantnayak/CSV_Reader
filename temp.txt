@@ -1,0 +1,66 @@
+ <%for(i of results){%>
+                <% let index = 0%>
+                <tr>
+                    <td>
+                        <%=index%>
+                        <%index+=1%>
+                    </td>
+                <%for(j of headers){%>
+                    <td>
+                        <%=i[j]%>
+                    </td>
+                <%}%>
+                </tr>
+            <%}%>
+
+
+
+
+    if (req.xhr) {
+        console.log(req.body.loc);
+
+        fs.createReadStream(path.join(__dirname, '../', req.body.loc))
+            .pipe(csv())
+            .on('data', (data) => results.push(data))
+            .on('end', () => {
+                // console.log(results);
+                let headers = [];
+                if (results.length) {
+                    headers = Object.keys(results[0]);
+                }
+                let qresults = [];
+
+
+                for (obj of results) {
+                    let flag = true;
+                    for (let i = 0; i < headers.length; i++) {
+                        // console.log(req.body['vals['+i+'][name]'] +" : " + req.body['vals['+i+'][value]'])
+                        if ('' != req.body['vals[' + i + '][value]']) {
+                            if (obj[req.body['vals[' + i + '][name]']] != req.body['vals[' + i + '][value]']) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (flag)
+                        qresults.push(obj);
+                }
+                console.log(results.length + " " + qresults.length);
+
+                return res.status(200).json({ data: qresults, message: 'all res fetched' });
+            });
+    }
+    else {
+        fs.createReadStream(path.join(__dirname, '../', req.query.loc))
+            .pipe(csv())
+            .on('data', (data) => results.push(data))
+            .on('end', () => {
+                // console.log(results);
+                let headers = [];
+                if (results.length) {
+                    headers = Object.keys(results[0]);
+                }
+
+                return res.render('csv-editor', { results: results, headers: headers, loc: req.query.loc });
+            });
+    }

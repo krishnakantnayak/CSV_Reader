@@ -1,0 +1,70 @@
+<html>
+    <head>
+        
+        <title>
+            <%=filename%>
+        </title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            input{
+                height: 100%;
+                border: none;
+                font-size: large;
+            }
+            
+
+        </style>
+        <script src=
+        "https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js">
+            </script>
+            
+    </head>
+    <body>
+        <h2>
+            <a href="/">Home</a>
+        </h2>
+        <h1>
+            <%=filename%>
+        </h1>
+        <input type="hidden" name="loc" id="loc" value="<%=loc%>">
+        <!-- main table format with dynamic headers -->
+        <table id="results-table">
+            <tr>
+                <th>
+                    index
+                </th>
+                <%for(i of headers){%>
+                    <th>
+                        <%=i%>
+                    </th>
+                <%}%>
+            </tr>
+            <tr>
+                <!-- query in csv form buttons -->
+                <form action="/" method="post" id="search-form">
+                    <td>
+                        <div style="display: flex;flex-direction: row;">
+                            <button type="button" id="search-btn" style="display: inline;">Query</button>
+                            <button type="button" id="reset-btn" onClick="window.location.reload();">Reset</button>
+                        </div>
+                        
+
+                    </td>
+                    <%for(i of headers){%>
+                        <td>
+                            <input type="text" class="search-fields" name="<%=i%>" id="<%=i%>"/>
+                        </td>
+                    <%}%>
+                    
+                </form>
+            </tr>
+
+           
+            
+        </table>
+    </body>
+    <script src="/js/csv-page.js"></script>
+</html>

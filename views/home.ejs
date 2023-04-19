@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <title>
+        CSV Uploader
+    </title>
+    <style>
+        a{
+            text-decoration: none;
+            font-size: large;
+            color: green;
+            border: 1px dotted green;
+            
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>
+        CSV Files List
+    </h1>
+    <!-- form to choose file by user -->
+    <form action="/save_file" method="post" enctype="multipart/form-data">
+        <input type="file" name="csvfile" placeholder="CSV File" />
+        <button type="submit">Save</button>
+    </form>
+    <ul>
+        <!-- list of csv files -->
+        <% for(i of csvlist){ %>
+            <li>
+                <a href="/show_csv/?loc=<%=i.Storage%>&filename=<%=i.display_name%>">
+                    <%=i.display_name%>
+                </a>
+                    
+            </li>
+            
+        <%}%>
+    </ul>
+</body>
+
+</html>
